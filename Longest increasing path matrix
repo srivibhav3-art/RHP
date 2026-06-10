@@ -1,0 +1,75 @@
+import java.util.*;
+
+public class Main {
+
+    static int[][] diff = {
+        {0, -1}, // Left
+        {0, 1},  // Right
+        {-1, 0}, // Up
+        {1, 0}   // Down
+    };
+
+    static int dfs(int[][] matrix, int[][] dp, int r, int c, int row, int col) {
+
+        if (dp[row][col] != 0) {
+            return dp[row][col];
+        }
+
+        int adjMax = 0;
+
+        for (int i = 0; i < 4; i++) {
+            int nr = row + diff[i][0];
+            int nc = col + diff[i][1];
+
+            if (nr >= 0 && nr < r &&
+                nc >= 0 && nc < c &&
+                matrix[nr][nc] > matrix[row][col]) {
+
+                adjMax = Math.max(adjMax,
+                                  dfs(matrix, dp, r, c, nr, nc));
+            }
+        }
+
+        dp[row][col] = 1 + adjMax;
+        return dp[row][col];
+    }
+
+    static int longestIncreasingPath(int[][] matrix) {
+
+        int r = matrix.length;
+        int c = matrix[0].length;
+
+        int[][] dp = new int[r][c];
+        int maxLen = 1;
+
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+
+                maxLen = Math.max(maxLen,
+                                  dfs(matrix, dp, r, c, i, j));
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int r = sc.nextInt();
+        int c = sc.nextInt();
+
+        int[][] matrix = new int[r][c];
+
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                matrix[i][j] = sc.nextInt();
+            }
+        }
+
+        System.out.println(longestIncreasingPath(matrix));
+
+        sc.close();
+    }
+}
