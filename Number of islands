@@ -1,0 +1,64 @@
+import java.util.*;
+
+public class Solution {
+
+    static int[][] diff = {
+        {0, -1}, // Left
+        {0, 1},  // Right
+        {-1, 0}, // Up
+        {1, 0}   // Down
+    };
+
+    private static void dfs(char[][] grid, int r, int c, int i, int j) {
+        grid[i][j] = '0'; // Mark as visited
+
+        for (int k = 0; k < 4; k++) {
+            int nr = i + diff[k][0];
+            int nc = j + diff[k][1];
+
+            if (nr >= 0 && nr < r &&
+                nc >= 0 && nc < c &&
+                grid[nr][nc] == '1') {
+
+                dfs(grid, r, c, nr, nc);
+            }
+        }
+    }
+
+    public static int numIslands(char[][] grid) {
+        int r = grid.length;
+        int c = grid[0].length;
+        int islands = 0;
+
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                if (grid[i][j] == '1') {
+                    islands++;
+                    dfs(grid, r, c, i, j);
+                }
+            }
+        }
+
+        return islands;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int r = sc.nextInt();
+        int c = sc.nextInt();
+
+        char[][] grid = new char[r][c];
+
+        for (int i = 0; i < r; i++) {
+            String row = sc.next();
+            for (int j = 0; j < c; j++) {
+                grid[i][j] = row.charAt(j);
+            }
+        }
+
+        System.out.println(numIslands(grid));
+
+        sc.close();
+    }
+}
