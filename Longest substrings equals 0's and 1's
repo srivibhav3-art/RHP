@@ -1,0 +1,30 @@
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+
+        int sum = 0;
+        int maxLen = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+
+            sum += (s.charAt(i) == '1') ? 1 : -1;
+
+            Integer prevIndex = map.get(sum);
+
+            if (prevIndex != null) {
+                maxLen = Math.max(maxLen, i - prevIndex);
+            } else {
+                map.put(sum, i);
+            }
+        }
+
+        System.out.println(maxLen);
+    }
+}
